@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "simple",
   "logo": "https://i.imgur.com/Q2UNwXR.jpg",
-  "repository": "https://gitlab.com/arjunsabu1267/pastebin",
+  "repository": "https://github.com/Bino-MD/pastebinapi",
   "stack": "container",
   "env": {
     "BASE_URL": {
@@ -30,4 +30,5 @@
       "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
     }
   ]
+
 }
