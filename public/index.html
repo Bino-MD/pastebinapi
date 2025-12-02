@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Paste — Premium</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-b from-slate-900 to-slate-800 min-h-screen text-slate-200">
+  <div class="max-w-4xl mx-auto py-20 px-6">
+    <header class="mb-8 text-center">
+      <h1 class="text-4xl font-semibold tracking-tight">Paste</h1>
+      <p class="text-slate-400 mt-2">Fast, minimal pastebin backed by MEGA</p>
+    </header>
+
+    <main class="bg-slate-900/60 p-6 rounded-2xl shadow-xl">
+      <form id="pasteForm" class="space-y-4">
+        <label class="block">
+          <span class="text-sm text-slate-300">Filename (optional)</span>
+          <input name="filename" class="mt-1 block w-full rounded-md bg-slate-800 p-3 border border-slate-700" placeholder="example.py" />
+        </label>
+
+        <label class="block">
+          <span class="text-sm text-slate-300">Language (for highlighting)</span>
+          <select name="language" class="mt-1 w-48 rounded-md bg-slate-800 p-2 border border-slate-700">
+            <option value="text">Plain Text</option>
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="css">CSS</option>
+            <option value="html">HTML</option>
+          </select>
+        </label>
+
+        <label class="block">
+          <span class="text-sm text-slate-300">Paste content</span>
+          <textarea name="content" id="content" rows="12" class="mt-1 block w-full rounded-md bg-slate-800 p-3 border border-slate-700 font-mono" placeholder="Your paste..."></textarea>
+        </label>
+
+        <div class="flex items-center gap-3">
+          <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 px-4 py-2 rounded-md font-medium">Create Paste</button>
+          <input type="file" id="file" class="text-sm text-slate-400" />
+        </div>
+
+        <p id="result" class="text-sm text-slate-300"></p>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById('pasteForm');
+    const fileInput = document.getElementById('file');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      const filename = form.filename.value;
+      const language = form.language.value;
+      const content = form.content.value;
+
+      if (fileInput.files.length > 0) {
+        formData.append('file', fileInput.files[0]);
+      } else {
+        formData.append('content', content);
+      }
+      formData.append('filename', filename);
+      formData.append('language', language);
+
+      result.textContent = 'Uploading...';
+      try {
+        const resp = await fetch('/api/paste', { method: 'POST', body: formData });
+        const json = await resp.json();
+        if (json.ok) {
+          result.innerHTML = `Paste created — <a class="text-emerald-300" href="${json.url}" target="_blank">${json.url}</a>`;
+        } else {
+          result.textContent = 'Error: ' + (json.error || 'unknown');
+        }
+      } catch (err) {
+        result.textContent = 'Network error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>

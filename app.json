@@ -1,0 +1,33 @@
+{
+  "name": "pastebinapi",
+  "version": "1.0.0",
+  "description": "simple",
+  "logo": "https://i.imgur.com/Q2UNwXR.jpg",
+  "repository": "https://gitlab.com/arjunsabu1267/pastebin",
+  "stack": "container",
+  "env": {
+    "BASE_URL": {
+      "description": "",
+      "required": false,
+      "value": "https://sparky.biz.id/"
+    },
+    "MEGA_EMAIL": {
+      "description": "",
+      "required": true,
+      "value": "example@gmail.com"
+    },
+    "MEGA_PASSWORD": {
+      "description": "",
+      "required": true,
+      "value": "pass"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    }
+  ]
+}
